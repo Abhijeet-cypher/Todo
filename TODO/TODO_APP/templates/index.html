@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block abhi %}
+
+<body class="new d-flex">
+  <div class="container mx-auto mt-5 p-5 index">
+    <div class="mx-auto">
+      <h1 class="text-center">TODO APP</h1>
+      {% if request.user.is_authenticated %}
+      <nav class="navbar bg-body-tertiary ">
+        <div class="container-fluid d-flex justify-content-center">
+          <form class="d-flex" method="POST" role="search">
+            {% csrf_token %}
+            <input
+              class="form-control me-5 todo-input"
+              type="search"
+              name="task"
+              placeholder="Enter task"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success" type="submit">
+              Submit
+            </button>
+          </form>
+        </div>
+      </nav>
+
+      <table class="table text-center">
+        <thead>
+          <tr>
+            <!-- <th scope="col">ID</th> -->
+            <th scope="col">Task</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+            <!-- <th scope="col">Handle</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in todos %}
+
+          <tr>
+            <!-- <th scope="row">{{task.id}}</th> -->
+            <td>{{task.todo_name}}</td>
+            {% if task.status %}
+            <td>Completed</td>
+            {% else %}
+            <td>In progress</td>
+            {% endif %}
+            <td>
+              <a href="{% url 'delete' task.id %}"
+                ><button class="btn btn-danger">Delete</button></a
+              >
+              <a href="{% url 'update' task.id %}"
+                ><button class="btn btn-success">Completed</button></a
+              >
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="text-center">
+        <a
+          href="{% url 'logout' %}"
+          class="btn-outline-primary"
+          style="text-decoration: none; color: inherit"
+          ><button class="btn btn-outline-danger">Log out</button></a
+        >
+      </div>
+    </div>
+    {% else %}
+    <button class="btn"><a href="{% url 'login' %}">Login</a></button>
+
+    <button class="btn"><a href="{% url 'signup' %}">signup</a></button>
+    {% endif %}
+  </div>
+</body>
+{% endblock %}
